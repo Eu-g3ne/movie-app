@@ -1,0 +1,25 @@
+%ic { 
+  font-family: "icons";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+[class*="icon-"] {
+  &:before {
+    @extend %ic;
+  }
+}
+
+.icon-anime:before {
+  content: "\e900";
+}
+.icon-serial:before {
+  content: "\e902";
+}
+.icon-film:before {
+  content: "\e901";
+}
