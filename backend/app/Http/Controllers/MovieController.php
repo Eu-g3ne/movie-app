@@ -77,12 +77,7 @@ class MovieController extends Controller
    */
   public function show(Movie $movie)
   {
-    $movie = cache()->remember(
-      $movie->slug,
-      now()->addMinutes(30),
-      fn () => $movie->load('categories', 'image')
-    );
-    return new MovieResource($movie->load('categories', 'image'));
+    return new MovieResource($movie);
   }
 
   /**

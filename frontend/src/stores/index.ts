@@ -7,16 +7,7 @@ export const useMovieStore = defineStore({
   state: () => ({
     movies: [] as Movie[],
     movie: {} as Movie,
-    // newMovie: {
-    //   title: "enter you title",
-    //   episode: 0,
-    //   total_episodes: 1,
-    //   status: "ongoing",
-    //   type: "film",
-    //   rating: 0,
-    //   is_favorite: false,
-    //   image: "/storage/default/def.png",
-    // } as Movie,
+    editMode: true as boolean, // need false
     moviesCount: 0,
     filteredMovies: [] as Movie[],
     isLoading: false as boolean,
@@ -25,13 +16,15 @@ export const useMovieStore = defineStore({
     getMoviesCount(): number {
       return this.movies.length;
     },
+    isReadonly(): boolean {
+      return !this.editMode;
+    },
   },
   actions: {
-    getAllMovies(): void {
-      MovieAPI.getMovies().then((data) => {
+    async getAllMovies(): Promise<void> {
+      await MovieAPI.getMovies().then((data) => {
         Object.assign(this, data);
         this.filteredMovies = this.movies;
-        this.isLoading = false;
       });
     },
     addMovie(movie: Movie): void {
@@ -46,10 +39,10 @@ export const useMovieStore = defineStore({
         this.moviesCount = this.getMoviesCount;
       }
     },
-    getMovieBySlug(slug: string): void {
-      MovieAPI.getBySlug(slug).then((data) => {
+    async getMovieBySlug(slug: string): Promise<void> {
+      await MovieAPI.getBySlug(slug).then((data) => {
         Object.assign(this.movie, data);
-        this.isLoading = false;
+        // this.isLoading = false;
       });
     },
     getFiltered(type: string, status: string) {

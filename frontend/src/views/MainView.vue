@@ -3,15 +3,15 @@
   lang="ts"
 >
 import FilteringGroup from "@/components/layout/FilteringGroup.vue";
-import CardList from "@/components/Card/CardList.vue";
+import CardList from "@/components/card/CardList.vue";
 
 import { useMovieStore } from "@/stores/index";
-import { onMounted } from "vue";
+import { onBeforeMount } from "vue";
 const { getAllMovies } = useMovieStore();
 
-onMounted(() => {
-  getAllMovies();
-});
+// onBeforeMount(() => {
+//   getAllMovies();
+// });
 </script>
 
 <template>

@@ -23,6 +23,7 @@ Route::prefix('categories')->group(function () {
   Route::delete('{category}', [CategoryController::class, 'destroy']);
 });
 
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
   return $request->user();
 });

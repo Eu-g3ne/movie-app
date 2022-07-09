@@ -4,7 +4,7 @@
 >
 import { useMovieStore } from "@/stores/index";
 
-import CardItem from "@/components/Card/CardItem.vue";
+import CardItem from "@/components/card/CardItem.vue";
 import { storeToRefs } from "pinia";
 
 const { filteredMovies: movies } = storeToRefs(useMovieStore());
