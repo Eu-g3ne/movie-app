@@ -3,6 +3,7 @@
   lang="ts"
 >
 import { useScrollEffect } from "@/composables/helpers";
+import SwitchButton from "../base/SwitchButton.vue";
 
 useScrollEffect();
 </script>
@@ -22,5 +23,8 @@ useScrollEffect();
         alt="Logo"
       />
     </router-link>
+    <div class="mr-16">
+      <SwitchButton />
+    </div>
   </header>
 </template>
