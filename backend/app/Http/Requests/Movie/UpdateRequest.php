@@ -28,6 +28,7 @@ class UpdateRequest extends FormRequest
   {
     return [
       'movie.title' => 'sometimes|string|max:255|',
+      'movie.description' => 'sometimes|string',
       'movie.episode' => 'sometimes|integer|lte:movie.total_episodes',
       'movie.total_episodes' => 'sometimes|integer|gte:movie.episode',
       'movie.status' => ['sometimes', new Enum(MovieStatusEnum::class)],

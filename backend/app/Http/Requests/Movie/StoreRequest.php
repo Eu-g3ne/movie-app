@@ -31,6 +31,7 @@ class StoreRequest extends FormRequest
   {
     return [
       'movie.title' => 'required|string|max:255|',
+      'movie.description' => 'required|string',
       'movie.episode' => 'sometimes|integer|lte:movie.total_episodes',
       'movie.total_episodes' => 'sometimes|integer|gte:movie.episode',
       'movie.status' => [new Enum(MovieStatusEnum::class), 'required'],

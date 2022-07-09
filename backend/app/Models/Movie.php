@@ -15,6 +15,7 @@ class Movie extends Model
 
   protected $fillable = [
     'title',
+    'description',
     'episode',
     'total_episodes',
     'status',

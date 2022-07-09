@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
   public function run()
   {
     for ($i = 0; $i < 10; $i++) {
-      Category::factory()->has(Movie::factory()->hasImage()->count(rand(2, 4)))->create();
+      Category::factory()->has(Movie::factory()->hasImage()->count(rand(2, 4))->suspended())->create();
     }
   }
 }
