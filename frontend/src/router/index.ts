@@ -37,12 +37,12 @@ const router = createRouter({
   sensitive: true,
 });
 
-router.beforeEach((to, from) => {
-  if (from.name !== undefined) {
-    const { isLoading } = storeToRefs(useMovieStore());
-    isLoading.value = true;
-  }
-  return true;
-});
+// router.beforeEach((to, from) => {
+//   if (from.name !== undefined) {
+//     const { isLoading } = storeToRefs(useMovieStore());
+//     isLoading.value = true;
+//   }
+//   return true;
+// });
 
 export default router;

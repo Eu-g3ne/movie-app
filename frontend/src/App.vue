@@ -7,18 +7,30 @@ import AppFooter from "./components/layout/AppFooter.vue";
 import Preloader from "./components/Preloader.vue";
 import { useMovieStore } from "@/stores/index";
 import { storeToRefs } from "pinia";
-const { isLoading } = storeToRefs(useMovieStore());
+const store = useMovieStore();
+const { isLoading } = storeToRefs(store);
+
+store.$onAction(({ name, store, args, after, onError }) => {
+  isLoading.value = true;
+
+  after((result) => {
+    isLoading.value = false;
+  });
+
+  onError((error) => {
+    console.warn("some error = ", error);
+  });
+});
 </script>
 
 <template>
   <div class="min-h-screen flex flex-col">
     <AppHeader />
-
-    <main class="grow shrink pt-24">
+    <main class="2xl:container grow shrink pt-24">
       <router-view v-slot="{ Component }">
         <Transition
           name="fade"
-          mode="default"
+          mode="out-in"
         >
           <component
             v-if="!isLoading"
@@ -29,7 +41,6 @@ const { isLoading } = storeToRefs(useMovieStore());
         </Transition>
       </router-view>
     </main>
-
     <AppFooter />
   </div>
 </template>
@@ -37,7 +48,7 @@ const { isLoading } = storeToRefs(useMovieStore());
 <style lang="scss">
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.5s;
+  transition: opacity 0.2s;
 }
 
 .fade-enter-from,
