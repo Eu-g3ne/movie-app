@@ -6,6 +6,7 @@ interface Movie {
   id: number;
   slug: string;
   title: string;
+  description: string;
   episode: number;
   total_episodes: number;
   status: MovieStatus;
@@ -13,7 +14,7 @@ interface Movie {
   rating: number;
   created_at?: string;
   updated_at?: string;
-  is_favorite: boolean;
+  is_favorite?: boolean;
   image: string;
   categories: Category[];
 }
