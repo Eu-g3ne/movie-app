@@ -18,7 +18,7 @@ useScrollEffect();
       to="/"
     >
       <img
-        class="h-16 w-full"
+        class="h-16 w-full object-scale-down"
         src="@/assets/icons/logo.png"
         alt="Logo"
       />
