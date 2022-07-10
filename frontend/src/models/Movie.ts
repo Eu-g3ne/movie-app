@@ -14,7 +14,7 @@ interface Movie {
   rating: number;
   created_at?: string;
   updated_at?: string;
-  is_favorite?: boolean;
+  is_favorite: boolean;
   image: string;
   categories: Category[];
 }
