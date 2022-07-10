@@ -4,7 +4,9 @@
 ></script>
 <template>
   <footer class="w-full min-h-20 bg-dark z-10">
-    <div class="container py-3 flex gap-2 flex-row justify-evenly leading-10">
+    <div
+      class="2xl:container py-3 grid gap-2 v-sm:grid-cols-3 grid-cols-1 justify-evenly leading-10"
+    >
       <a
         href="/"
         class="flex items-center"
@@ -17,23 +19,23 @@
       </a>
       <div>
         <h1 class="font-bold text-center">Links</h1>
-        <ul class="">
-          <li class="">
+        <ul>
+          <li>
             <a
               href="https://github.com/Eu-g3ne"
               target="_blank"
               rel="noopener noreferrer"
-              class="github-link"
+              class="mx-auto github-link"
             >
               Github
             </a>
           </li>
-          <li class="">
+          <li>
             <a
               href="https://t.me/eu_g3ne"
               target="_blank"
               rel="noopener noreferrer"
-              class="tg-link"
+              class="mx-auto tg-link"
             >
               Telegram
             </a>
@@ -41,8 +43,8 @@
         </ul>
       </div>
       <div>
-        <h1 class="font-bold">Stack</h1>
-        Vue - Laravel API
+        <h1 class="font-bold text-center">Stack</h1>
+        <span class="flex justify-center text-sm">Vue - Laravel API</span>
       </div>
     </div>
   </footer>
@@ -57,8 +59,9 @@ h1 {
 ul {
   li {
     width: min-content;
+    margin: auto;
     a {
-      @apply duration-300 hover:text-gray-400;
+      @apply duration-300 hover:text-gray-400 text-sm;
     }
   }
 }
