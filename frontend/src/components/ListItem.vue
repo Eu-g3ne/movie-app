@@ -3,12 +3,17 @@
   lang="ts"
 >
 const props = defineProps<{
-  title: String | Number;
+  value: String | Number;
+  readonly?: boolean;
+}>();
+
+const emit = defineEmits<{
+  (e: "update:value", value: String | Number): void;
 }>();
 </script>
 <template>
   <div>
-    <div>{{ title }}:</div>
+    <div>{{ value }}:</div>
     <span class="font-semibold">
       <slot />
     </span>

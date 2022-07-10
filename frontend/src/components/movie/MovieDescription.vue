@@ -17,7 +17,9 @@ const emit = defineEmits<{
 </script>
 <template>
   <div class="text-start text-md">
-    <p class="font-semibold text-xl indent-5">Description</p>
+    <p class="font-semibold text-xl indent-5 truncate v-sm:whitespace-normal">
+      Description
+    </p>
     <Transition
       name="fade"
       mode="out-in"
@@ -48,19 +50,5 @@ const emit = defineEmits<{
 .description {
   @apply font-normal bg-dark/0 resize-none w-full tracking-normal;
   @include editable-border;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.fade-leave-from .fade-enter-to {
-  opacity: 0;
 }
 </style>

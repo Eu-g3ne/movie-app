@@ -17,7 +17,11 @@ const emit = defineEmits<{
     mode="out-in"
     :duration="300"
   >
-    <span v-if="readonly">{{ title }}</span>
+    <span
+      v-if="readonly"
+      :title="title"
+      >{{ title }}</span
+    >
     <input
       v-else
       type="text"
@@ -30,29 +34,14 @@ const emit = defineEmits<{
   lang="scss"
   scoped
 >
+input,
+span {
+  @apply bg-dark/0 font-normal sm:font-semibold ml-0 mr-auto text-3xl w-full tracking-[2px];
+}
 input {
   @include editable-border;
 }
-
-input,
 span {
-  @apply bg-dark/0 font-normal sm:font-semibold ml-0 mr-auto text-start text-3xl w-full tracking-[2px];
-}
-span {
-  @apply p-2;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.fade-leave-from .fade-enter-to {
-  opacity: 0;
+  @apply p-2 sm:text-start text-center;
 }
 </style>
