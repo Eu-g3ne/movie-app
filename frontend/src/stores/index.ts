@@ -46,7 +46,6 @@ export const useMovieStore = defineStore({
       });
     },
     getFiltered(type: string, status: string) {
-      this.isLoading = true;
       this.filteredMovies = this.movies;
       if (type === "all" && status !== "all") {
         this.filteredMovies = this.filteredMovies.filter(
@@ -61,7 +60,6 @@ export const useMovieStore = defineStore({
           (movie: Movie) => movie.status === status && movie.type === type
         );
       }
-      this.isLoading = false;
     },
   },
 });
