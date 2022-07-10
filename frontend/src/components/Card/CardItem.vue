@@ -28,9 +28,10 @@ const getEpisode = computed(() => {
           alt=""
         />
         <figcaption
-          class="absolute text-center w-full h-full p-2 flex flex-row justify-between"
+          class="absolute text-center w-full h-full p-2 flex flex-row justify-between gap-1 grow shrink basis-0"
         >
           <MovieRating
+            class="self-end"
             :rating="movie.rating"
             readonly
           />
