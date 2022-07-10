@@ -59,4 +59,11 @@ store.$onAction(({ name, store, args, after, onError }) => {
 .fade-leave-from .fade-enter-to {
   opacity: 0;
 }
+
+* {
+  @apply v-sm:whitespace-normal text-ellipsis;
+  textarea {
+    @apply whitespace-normal;
+  }
+}
 </style>
