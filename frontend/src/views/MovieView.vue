@@ -4,38 +4,35 @@
 >
 import { computed } from "vue";
 
-import ListItem from "@/components/ListItem.vue";
+import MovieInfo from "@/components/movie/MovieInfo.vue";
 import MovieRating from "@/components/movie/MovieRating.vue";
 import MovieTitle from "@/components/movie/MovieTitle.vue";
 import MovieDescription from "@/components/movie/MovieDescription.vue";
 import MovieFavorite from "@/components/movie/MovieFavorite.vue";
 import { storeToRefs } from "pinia";
 import { useMovieStore } from "@/stores/index";
-import { capitalize } from "@/composables/helpers";
 
 const props = defineProps<{
   slug: string;
 }>();
 const { movie, isReadonly } = storeToRefs(useMovieStore());
-const cols = computed<Object>(() => {
-  return {
-    Type: capitalize(movie.value.type),
-    Status: capitalize(movie.value.status),
-    "Stopped on": movie.value.episode,
-    "Total episodes": movie.value.total_episodes,
-  };
-});
 </script>
 <template>
   <div class="text-sm sm:text-lg p-5">
     <div class="relative z-0 rounded-xl shadow-2xl">
       <!-- background image -->
       <div
+        v-if="isReadonly"
+        class="absolute w-full h-full rounded-xl -z-[200] opacity-40 backdrop"
+        :style="{ 'background-image': `url(${movie.image})` }"
+      ></div>
+      <div
+        v-else
         class="absolute w-full h-full rounded-xl -z-[200] opacity-40 backdrop"
         :style="{ 'background-image': `url(${movie.image})` }"
       ></div>
       <!-- background image -->
-      <div class="grid grid-cols-12 gap-2 h-auto text-center p-5">
+      <div class="grid grid-cols-12 gap-2 h-auto text-center p-5 items-center">
         <MovieTitle
           class="2xl:col-span-11 sm:col-span-9 col-span-12"
           v-model:title="movie.title"
@@ -53,13 +50,32 @@ const cols = computed<Object>(() => {
             :readonly="isReadonly"
           />
         </div>
-        <ListItem
+        <MovieInfo
           class="v-sm:col-span-3 col-span-12"
-          v-for="(value, key) in cols"
-          :value="capitalize(key)"
-        >
-          {{ value }}
-        </ListItem>
+          title="Type"
+          v-model:value="movie.type"
+          :readonly="isReadonly"
+        />
+        <MovieInfo
+          class="v-sm:col-span-3 col-span-12"
+          title="Status"
+          v-model:value="movie.status"
+          :readonly="isReadonly"
+        />
+        <MovieInfo
+          class="v-sm:col-span-3 col-span-12"
+          title="Episode"
+          v-model:value="movie.episode"
+          :readonly="isReadonly"
+          :max="movie.total_episodes"
+        />
+        <MovieInfo
+          class="v-sm:col-span-3 col-span-12"
+          title="Total episodes"
+          v-model:value="movie.total_episodes"
+          :readonly="isReadonly"
+          :min="movie.episode"
+        />
         <MovieDescription
           class="col-span-12"
           v-model:description="movie.description"
