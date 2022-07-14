@@ -9,6 +9,7 @@ import MovieRating from "@/components/movie/MovieRating.vue";
 import MovieTitle from "@/components/movie/MovieTitle.vue";
 import MovieDescription from "@/components/movie/MovieDescription.vue";
 import MovieFavorite from "@/components/movie/MovieFavorite.vue";
+import MovieTags from "@/components/movie/MovieTags.vue";
 import { storeToRefs } from "pinia";
 import { useMovieStore } from "@/stores/index";
 
@@ -32,7 +33,9 @@ const { movie, isReadonly } = storeToRefs(useMovieStore());
         :style="{ 'background-image': `url(${movie.image})` }"
       ></div>
       <!-- background image -->
-      <div class="grid grid-cols-12 gap-2 h-auto text-center p-5 items-center">
+      <div
+        class="grid grid-cols-12 gap-x-2 gap-y-10 h-auto text-center p-5 items-center"
+      >
         <MovieTitle
           class="2xl:col-span-11 sm:col-span-9 col-span-12"
           v-model:title="movie.title"
@@ -51,26 +54,26 @@ const { movie, isReadonly } = storeToRefs(useMovieStore());
           />
         </div>
         <MovieInfo
-          class="v-sm:col-span-3 col-span-12"
+          class="v-sm:col-span-3 col-span-12 self-end"
           title="Type"
           v-model:value="movie.type"
           :readonly="isReadonly"
         />
         <MovieInfo
-          class="v-sm:col-span-3 col-span-12"
+          class="v-sm:col-span-3 col-span-12 self-end"
           title="Status"
           v-model:value="movie.status"
           :readonly="isReadonly"
         />
         <MovieInfo
-          class="v-sm:col-span-3 col-span-12"
+          class="v-sm:col-span-3 col-span-12 self-end"
           title="Episode"
           v-model:value="movie.episode"
           :readonly="isReadonly"
           :max="movie.total_episodes"
         />
         <MovieInfo
-          class="v-sm:col-span-3 col-span-12"
+          class="v-sm:col-span-3 col-span-12 self-end"
           title="Total episodes"
           v-model:value="movie.total_episodes"
           :readonly="isReadonly"
@@ -81,6 +84,12 @@ const { movie, isReadonly } = storeToRefs(useMovieStore());
           v-model:description="movie.description"
           :readonly="isReadonly"
         />
+        <div class="col-span-12 justify-self-end">
+          <MovieTags
+            v-model:tags="movie.categories"
+            :readonly="isReadonly"
+          />
+        </div>
       </div>
     </div>
     <div class="p-5">
