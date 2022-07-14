@@ -16,7 +16,7 @@ interface Movie {
   updated_at?: string;
   is_favorite: boolean;
   image: string;
-  categories: Category[];
+  categories: Array<string>;
 }
 
 interface Movies {
