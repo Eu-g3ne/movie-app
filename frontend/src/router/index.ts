@@ -24,8 +24,9 @@ const router = createRouter({
       component: MovieView,
       props: true,
       beforeEnter: (to, from) => {
-        const { getMovieBySlug } = useMovieStore();
+        const { getMovieBySlug, getCategories } = useMovieStore();
         getMovieBySlug(to.params.slug as string);
+        getCategories();
       },
     },
     {

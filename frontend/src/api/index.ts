@@ -16,6 +16,7 @@ const requests = {
 
 export const MovieAPI = {
   getMovies: (): Promise<Movies> => requests.get("movies"),
+  getAllCategories: (): Promise<Array<string>> => requests.get("categories"),
   getBySlug: (slug: string): Promise<Movie> => requests.get(`movies/${slug}`),
   createMovie: (movie: Movie): Promise<Movie> => requests.post("movies", movie),
   deleteMovie: (id: number): Promise<void> => requests.delete(`movies/${id}`),
