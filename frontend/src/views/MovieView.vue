@@ -10,6 +10,7 @@ import MovieTitle from "@/components/movie/MovieTitle.vue";
 import MovieDescription from "@/components/movie/MovieDescription.vue";
 import MovieFavorite from "@/components/movie/MovieFavorite.vue";
 import MovieTags from "@/components/movie/MovieTags.vue";
+import BaseButton from "@/components/base/BaseButton.vue";
 import { storeToRefs } from "pinia";
 import { useMovieStore } from "@/stores/index";
 
@@ -84,11 +85,14 @@ const { movie, isReadonly } = storeToRefs(useMovieStore());
           v-model:description="movie.description"
           :readonly="isReadonly"
         />
-        <div class="col-span-12 justify-self-end">
+        <div class="col-span-6">
           <MovieTags
             v-model:tags="movie.categories"
             :readonly="isReadonly"
           />
+        </div>
+        <div class="col-span-6 justify-self-end self-end">
+          <BaseButton class="bg-dark p-3 rounded-xl">Save changes</BaseButton>
         </div>
       </div>
     </div>
