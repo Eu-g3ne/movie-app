@@ -6,6 +6,7 @@ export const useMovieStore = defineStore({
   id: "MovieStore",
   state: () => ({
     movies: [] as Movie[],
+    categories: [] as Array<string>,
     movie: {} as Movie,
     editMode: true as boolean, // need false
     moviesCount: 0,
@@ -25,6 +26,11 @@ export const useMovieStore = defineStore({
       await MovieAPI.getMovies().then((data) => {
         Object.assign(this, data);
         this.filteredMovies = this.movies;
+      });
+    },
+    async getCategories(): Promise<void> {
+      await MovieAPI.getAllCategories().then((data) => {
+        Object.assign(this, data);
       });
     },
     addMovie(movie: Movie): void {

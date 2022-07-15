@@ -3,4 +3,4 @@ interface Category {
   name: string;
 }
 
-export default Category;
+export type { Category };
