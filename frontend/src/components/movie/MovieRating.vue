@@ -13,13 +13,15 @@ const emit = defineEmits<{
   (e: "update:rating", value: number): void;
 }>();
 
-const getValue = (e: HTMLInputElement): number => {
-  return parseInt(e.value);
+const getValue = (e: Event): number => {
+  return parseInt((e.target as HTMLInputElement).value);
 };
 
 const collapseInput = computed<Object>(() => ({
   "group-hover:max-h-96": !props.readonly,
   "group-focus-within:max-h-96": !props.readonly,
+  "h-max": !props.readonly,
+  "h-full": props.readonly,
 }));
 
 function updateRating(e: WheelEvent) {
@@ -37,7 +39,7 @@ function updateRating(e: WheelEvent) {
     v-on="{ wheel: readonly ? null : updateRating }"
   >
     <div
-      class="absolute inset-0 bg-dark/80 h-max max-h-12 rounded-xl py-3 sm:py-2 overflow-hidden duration-700"
+      class="absolute inset-0 bg-dark/80 max-h-12 min-w-fit rounded-xl py-3 sm:py-2 overflow-hidden duration-700"
       :class="collapseInput"
     >
       <div class="flex flex-row justify-center align-center">
@@ -65,7 +67,7 @@ function updateRating(e: WheelEvent) {
           max="10"
           step="1"
           :value="rating"
-          @input="emit('update:rating', getValue(($event.target as HTMLInputElement)))"
+          @input="emit('update:rating', getValue($event))"
         />
       </template>
     </div>
