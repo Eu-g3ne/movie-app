@@ -9,7 +9,7 @@
     >
       <a
         href="/"
-        class="flex items-center"
+        class="flex items-center justify-center"
       >
         <img
           class="max-h-16"

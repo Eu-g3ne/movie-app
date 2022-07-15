@@ -4,13 +4,13 @@
 ></script>
 <template>
   <button
-    class="h-6 w-6 aspect-square align-middle bg-light rounded-full p-[2px]"
+    class="h-6 w-6 aspect-square align-middle bg-white rounded-full p-[2px]"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       class="block w-full h-full aspect-square m-auto"
       viewBox="0 0 20 20"
-      fill="currentColor"
+      fill="#161d27"
     >
       <path
         fill-rule="evenodd"
