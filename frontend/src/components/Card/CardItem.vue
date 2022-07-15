@@ -4,6 +4,7 @@
 >
 import type { Movie } from "@/models/Movie";
 import MovieRating from "@/components/movie/MovieRating.vue";
+import MovieFavorite from "../movie/MovieFavorite.vue";
 import { computed } from "vue";
 
 const props = defineProps<{
@@ -40,7 +41,7 @@ const getEpisode = computed(() => {
           >
             {{ getEpisode }}
           </span>
-          <button
+          <!-- <button
             class="bg-dark/90 p-2 rounded-xl h-12 group self-end"
             @click.prevent="movie.is_favorite = !movie.is_favorite"
           >
@@ -65,7 +66,11 @@ const getEpisode = computed(() => {
                 stroke-width="2"
               />
             </svg>
-          </button>
+          </button> -->
+          <MovieFavorite
+            :favorite="movie.is_favorite"
+            readonly
+          />
         </figcaption>
       </figure>
     </router-link>
