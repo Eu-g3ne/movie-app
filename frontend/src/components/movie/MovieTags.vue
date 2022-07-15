@@ -3,9 +3,13 @@
   lang="ts"
 >
 import CrossButton from "@/components/CrossButton.vue";
-import { computed, nextTick, ref, type Ref } from "vue";
 import PlusButton from "@/components/buttons/PlusButton.vue";
-import { takeRight } from "lodash";
+import MovieTagsSelect from "@/components/movie/MovieTagsSelect.vue";
+import { computed, nextTick, ref, type Ref } from "vue";
+import { useMovieStore } from "@/stores";
+import { storeToRefs } from "pinia";
+
+const { categories } = storeToRefs(useMovieStore());
 
 const props = defineProps<{
   tags: Array<string>;
@@ -18,16 +22,21 @@ const emit = defineEmits<{
 
 const vFocus = {
   mounted: (el: HTMLElement) => {
-    el.focus();
+    if ((el as HTMLInputElement).value === "") el.focus();
   },
 };
 
 const activeTag: Ref<number | null> = ref(null);
 
+const tagInput: Ref<HTMLInputElement[] | null> = ref(null);
+
 async function addTag() {
   emit("update:tags", props.tags.concat(""));
   await nextTick();
   activeTag.value = props.tags.length - 1;
+  if (tagInput.value !== null && tagInput.value[activeTag.value] !== null) {
+    tagInput.value[activeTag.value].focus();
+  }
 }
 
 function removeTag(index: number) {
@@ -48,10 +57,15 @@ const gridByTags = computed(() => {
     ? `grid-cols-${props.tags.length + 1}`
     : "grid-cols-3";
 });
+
+function selectTag(el: HTMLInputElement) {
+  emit("update:tags", props.tags.concat(el.value));
+  el.value = "";
+}
 </script>
 <template>
   <div
-    class="flex flex-row flex-wrap items-center gap-2 p-2 rounded-xl max-w-lg"
+    class="flex flex-row flex-wrap items-center gap-2 p-2 rounded-xl after:content-[''] after:grow-[15]"
     :class="gridByTags"
   >
     <div
@@ -65,23 +79,22 @@ const gridByTags = computed(() => {
       >
         <div
           v-if="readonly"
-          class="pr-3 min-w-[40px] w-full text-start"
-          @click="activeTag = index"
+          class="min-w-[40px] text-start inline"
         >
           {{ tag }}
         </div>
         <template v-else>
           <div class="flex flex-row justify-between items-center">
             <input
-              v-focus
               v-model="tags[index]"
+              ref="tagInput"
               class="block min-w-[40px] bg-dark/0"
               type="text"
               maxlength="14"
               :style="{ width: tag.length + 1 + 'ch' }"
               @keydown.enter="removeOnNull(index)"
               @blur="removeOnNull(index)"
-              @click="activeTag = index"
+              @focus="activeTag = index"
             />
             <CrossButton @click="removeTag(index)" />
           </div>
@@ -97,7 +110,22 @@ const gridByTags = computed(() => {
         class="w-8 h-8"
         v-if="!readonly"
       >
-        <PlusButton @click="addTag()" />
+        <PlusButton
+          @click="addTag()"
+          title="Add new tag"
+        />
+      </div>
+    </Transition>
+    <Transition
+      name="fade"
+      mode="out-in"
+      :duration="300"
+    >
+      <div v-if="!readonly">
+        <MovieTagsSelect
+          :tags="categories.filter((val) => !tags.includes(val))"
+          @change="selectTag(($event.target as HTMLInputElement))"
+        />
       </div>
     </Transition>
   </div>
