@@ -17,8 +17,10 @@ class ImageFactory extends Factory
    */
   public function definition()
   {
+    $i = rand(1, 5);
     return [
-      'url' => Storage::url('default/default' . rand(1, 5) . '.jpg'),
+      'poster' => 'images/img/ps' . $i . '.jpg',
+      'background' => 'images/img/bg' . $i . '.jpg',
     ];
   }
 }

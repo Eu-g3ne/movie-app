@@ -1,9 +1,9 @@
 import type MovieStatus from "@/models/Enums/MovieStatus";
 import type MovieType from "@/models/Enums/MovieType";
-import type Category from "@/models/Category";
+import type { Image } from "@/models/Image";
 
 interface Movie {
-  id: number;
+  readonly id: number;
   slug: string;
   title: string;
   description: string;
@@ -15,7 +15,7 @@ interface Movie {
   created_at?: string;
   updated_at?: string;
   is_favorite: boolean;
-  image: string;
+  image: Image;
   categories: Array<string>;
 }
 

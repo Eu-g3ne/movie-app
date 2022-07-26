@@ -9,6 +9,8 @@ use App\Http\Resources\MovieResource;
 use App\Models\Movie;
 use Illuminate\Http\Request;
 use App\Services\MovieService;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Throwable;
 
 class MovieController extends Controller
@@ -57,11 +59,11 @@ class MovieController extends Controller
   {
     try {
 
-      $movie = Movie::create($request->validated()['movie']);
+      $movie = Movie::create($request->validated());
 
-      $movie->image()->create($request->validated()['movie']['image']);
+      $this->movieService->storeImages($movie, $request);
 
-      $this->movieService->syncCategories($movie, $request->validated()['movie']['categories'] ?? []);
+      $this->movieService->syncCategories($movie, $request->validated()['categories'] ?? []);
       return $this->movieResponse($movie);
     } catch (Throwable $e) {
       report($e);
@@ -96,9 +98,15 @@ class MovieController extends Controller
    */
   public function update(UpdateRequest $request, Movie $movie)
   {
-    //
-    $movie->update($request->validated()['movie']);
-    $this->movieService->syncCategories($movie, $request->validated()['movie']['categories'] ?? []);
+    $movie->update($request->validated());
+    $this->movieService->updateImages($movie, $request);
+    // dump($request->validated()['categories']);
+    // dump(isset($request->validated()['categories']));
+    // dd($request->validated()['categories'][0] === null);
+    if (isset($request->validated()['categories'])) {
+      $this->movieService->syncCategories($movie, $request->validated()['categories'][0] !== null ? $request->validated()['categories'] : []);
+    }
+
 
     return new MovieResource($movie->load('categories', 'image'));
   }
