@@ -35,14 +35,14 @@ function updateRating(e: WheelEvent) {
 </script>
 <template>
   <div
-    class="relative w-16 h-12 group"
+    class="relative w-16 h-10 group"
     v-on="{ wheel: readonly ? null : updateRating }"
   >
     <div
-      class="absolute inset-0 bg-dark/80 max-h-12 min-w-fit rounded-xl py-3 sm:py-2 overflow-hidden duration-700"
+      class="absolute inset-0 bg-dark/80 max-h-10 min-w-fit rounded-xl overflow-hidden duration-700"
       :class="collapseInput"
     >
-      <div class="flex flex-row justify-center align-center">
+      <div class="flex flex-row justify-center items-center h-10">
         <div class="bg-dark/0 w-6 my-auto text-center align-middle">
           {{ rating }}
         </div>

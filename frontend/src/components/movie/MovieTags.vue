@@ -45,10 +45,11 @@ function removeTag(index: number) {
   emit("update:tags", tags);
 }
 
-function removeOnNull(index: number) {
+function removeOnNull(index: number, event: Event) {
   if (props.tags[index] === "") {
     removeTag(index);
   }
+  (event.target as HTMLInputElement).blur();
   activeTag.value = null;
 }
 
@@ -91,9 +92,9 @@ function selectTag(el: HTMLInputElement) {
               class="block min-w-[40px] bg-dark/0"
               type="text"
               maxlength="14"
-              :style="{ width: tag.length + 1 + 'ch' }"
-              @keydown.enter="removeOnNull(index)"
-              @blur="removeOnNull(index)"
+              :style="{ width: tag.length + 'ch' }"
+              @keydown.enter="removeOnNull(index, $event)"
+              @blur="removeOnNull(index, $event)"
               @focus="activeTag = index"
             />
             <CrossButton @click="removeTag(index)" />
