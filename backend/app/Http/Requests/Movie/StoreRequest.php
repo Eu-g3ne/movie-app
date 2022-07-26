@@ -30,17 +30,18 @@ class StoreRequest extends FormRequest
   public function rules()
   {
     return [
-      'movie.title' => 'required|string|max:255|',
-      'movie.description' => 'required|string',
-      'movie.episode' => 'sometimes|integer|lte:movie.total_episodes',
-      'movie.total_episodes' => 'sometimes|integer|gte:movie.episode',
-      'movie.status' => [new Enum(MovieStatusEnum::class), 'required'],
-      'movie.type' => [new Enum(MovieTypeEnum::class), 'required'],
-      'movie.rating' => 'sometimes|integer|between:0,10',
-      'movie.is_favorite' => 'sometimes|boolean',
-      'movie.image.url' => 'required|url',
-      'movie.categories' => 'sometimes|array',
-      'movie.categoires.*' => 'sometimes|string|max:255',
+      'title' => 'required|string|max:255|',
+      'description' => 'required|string',
+      'episode' => 'sometimes|integer|lte:total_episodes',
+      'total_episodes' => 'sometimes|integer|gte:episode',
+      'status' => [new Enum(MovieStatusEnum::class), 'required'],
+      'type' => [new Enum(MovieTypeEnum::class), 'required'],
+      'rating' => 'sometimes|integer|between:0,10',
+      'is_favorite' => 'sometimes|boolean',
+      'image.poster' => 'required|file|mimes:jpg,jpeg,png',
+      'image.background' => 'required|file|mimes:jpg,jpeg,png',
+      'categories' => 'sometimes|array',
+      'categoires.*' => 'sometimes|string|max:255',
     ];
   }
 }

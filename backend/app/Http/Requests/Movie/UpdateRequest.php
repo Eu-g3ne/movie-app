@@ -27,17 +27,18 @@ class UpdateRequest extends FormRequest
   public function rules()
   {
     return [
-      'movie.title' => 'sometimes|string|max:255|',
-      'movie.description' => 'sometimes|string',
-      'movie.episode' => 'sometimes|integer|lte:movie.total_episodes',
-      'movie.total_episodes' => 'sometimes|integer|gte:movie.episode',
-      'movie.status' => ['sometimes', new Enum(MovieStatusEnum::class)],
-      'movie.type' => ['sometimes', new Enum(MovieTypeEnum::class)],
-      'movie.rating' => 'sometimes|integer|between:0,10',
-      'movie.is_favorite' => 'sometimes|boolean',
-      'movie.image.url' => 'sometimes|url',
-      'movie.categories' => 'sometimes|array',
-      'movie.categoires.*' => 'sometimes|string|max:255',
+      'title' => 'sometimes|string|max:255|',
+      'description' => 'sometimes|string',
+      'episode' => 'sometimes|integer',
+      'total_episodes' => 'sometimes|integer',
+      'status' => ['sometimes', new Enum(MovieStatusEnum::class)],
+      'type' => ['sometimes', new Enum(MovieTypeEnum::class)],
+      'rating' => 'sometimes|integer|between:0,10',
+      'is_favorite' => 'sometimes|boolean',
+      'image.poster' => 'sometimes|file|mimes:jpg,jpeg,png',
+      'image.background' => 'sometimes|file|mimes:jpg,jpeg,png',
+      'categories' => 'sometimes|array',
+      'categoires.*' => 'sometimes|string|max:14',
     ];
   }
 }

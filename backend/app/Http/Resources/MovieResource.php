@@ -20,16 +20,19 @@ class MovieResource extends JsonResource
       'slug' => $this->slug,
       'title' => $this->title,
       'description' => $this->description,
-      'episode' => $this->episode,
-      'total_episodes' => $this->total_episodes,
+      'episode' => (int)$this->episode,
+      'total_episodes' => (int)$this->total_episodes,
       'status' => $this->status,
       'type' => $this->type,
-      'rating' => $this->rating,
+      'rating' => (int)$this->rating,
       'created_at' => $this->created_at,
       'updated_at' => $this->updated_at,
       'is_favorite' => (bool)$this->is_favorite,
       // 'image' => $this->image->url ? asset($this->image->url) : null,
-      'image' => $this->image->url ?: null,
+      'image' => [
+        'poster' => $this->image->poster ?: null,
+        'background' => $this->image->background ?: null,
+      ],
       'categories' => $this->categories->pluck('name'),
     ];
   }
