@@ -18,10 +18,10 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
-      "^/storage/": {
-        target: "http://localhost:8000/storage",
+      "^/images/": {
+        target: "http://localhost:8000/",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/storage/, ""),
+        // rewrite: (path) => path.replace(/^\/images/, ""),
       },
     },
   },
