@@ -12,7 +12,7 @@ const emit = defineEmits<{
 }>();
 </script>
 <template>
-  <div class="relative bg-dark/80 h-12 aspect-square rounded-xl group flex">
+  <div class="relative bg-dark/80 h-12 aspect-square rounded-full group flex">
     <button
       v-if="!readonly"
       class="absolute inset-0 w-full h-full z-100"
