@@ -3,12 +3,12 @@
   lang="ts"
 >
 const props = defineProps<{
-  favorite: boolean;
+  favorite: boolean | 0 | 1;
   readonly: boolean;
 }>();
 
 const emit = defineEmits<{
-  (e: "update:favorite", value: boolean): void;
+  (e: "update:favorite", value: boolean | number): void;
 }>();
 </script>
 <template>
@@ -16,7 +16,7 @@ const emit = defineEmits<{
     <button
       v-if="!readonly"
       class="absolute inset-0 w-full h-full z-100"
-      @click="emit('update:favorite', !favorite)"
+      @click="emit('update:favorite', +!favorite)"
     ></button>
     <svg
       xmlns="http://www.w3.org/2000/svg"
