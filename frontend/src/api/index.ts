@@ -21,8 +21,10 @@ export const MovieAPI = {
   getMovies: (): Promise<Movies> => requests.get("movies"),
   getAllCategories: (): Promise<Array<string>> => requests.get("categories"),
   getBySlug: (slug: string): Promise<Movie> => requests.get(`movies/${slug}`),
-  createMovie: (movie: Movie): Promise<Movie> => requests.post("movies", movie),
-  updateMovie: (slug: string, movie: any): Promise<Movie> =>
+  createMovie: (movie: FormData): Promise<Movie> =>
+    requests.post("movies", movie),
+  updateMovie: (slug: string, movie: FormData): Promise<Movie> =>
     requests.post(`movies/${slug}`, movie),
-  deleteMovie: (id: number): Promise<void> => requests.delete(`movies/${id}`),
+  deleteMovie: (slug: string): Promise<void> =>
+    requests.delete(`movies/${slug}`),
 };
