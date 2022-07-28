@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Movie;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,9 +14,11 @@ return new class extends Migration
    */
   public function up()
   {
-    Schema::table('images', function (Blueprint $table) {
-      $table->renameColumn('url', 'poster');
+    Schema::create('images', function (Blueprint $table) {
+      $table->id();
+      $table->string('poster');
       $table->string('background');
+      $table->foreignIdFor(Movie::class)->constrained()->onDelete('cascade');
     });
   }
 
@@ -26,9 +29,6 @@ return new class extends Migration
    */
   public function down()
   {
-    Schema::table('images', function (Blueprint $table) {
-      $table->dropColumn('poster');
-      $table->dropColumn('background');
-    });
+    Schema::dropIfExists('images');
   }
 };

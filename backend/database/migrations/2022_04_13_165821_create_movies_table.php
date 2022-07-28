@@ -19,6 +19,7 @@ return new class extends Migration
       $table->id();
       $table->string('title');
       $table->string('slug')->unique();
+      $table->longText('description')->nullable();
       $table->unsignedSmallInteger('episode')->default(0);
       $table->unsignedSmallInteger('total_episodes')->default(1);
       $table->string('status');
