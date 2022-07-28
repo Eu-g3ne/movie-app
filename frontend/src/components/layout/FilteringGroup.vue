@@ -10,15 +10,15 @@ import { ref, watch, type Ref } from "vue";
 import { useMovieStore } from "@/stores/index";
 
 import { getNames } from "@/composables/helpers";
-const { getFiltered } = useMovieStore();
+import { storeToRefs } from "pinia";
+const { type: stateType, status: stateStatus } = storeToRefs(useMovieStore());
 
 const type: Ref<string> = ref("all");
 const status: Ref<string> = ref("all");
 
 watch([type, status], ([newType, newStatus], [prevType, prevStatus]) => {
-  if (newType !== undefined && newStatus !== undefined) {
-    getFiltered(newType, newStatus);
-  }
+  stateType.value = newType;
+  stateStatus.value = newStatus;
 });
 </script>
 <template>

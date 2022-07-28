@@ -1,9 +1,11 @@
 import { MovieAPI } from "@/api";
 import type { Movie } from "@/models/Movie";
 import { defineStore } from "pinia";
-import { difference, toFormData } from "@/composables/helpers";
+import { difference } from "@/composables/helpers";
 import { clone, cloneDeep } from "lodash";
 import { serialize } from "object-to-formdata";
+import type MovieType from "@/models/Enums/MovieType";
+import type MovieStatus from "@/models/Enums/MovieStatus";
 
 export const useMovieStore = defineStore({
   id: "MovieStore",
@@ -11,6 +13,8 @@ export const useMovieStore = defineStore({
     movie: {} as Movie,
     readonlyMovie: {} as Readonly<Movie>,
     movies: [] as Movie[],
+    type: "all" as string,
+    status: "all" as string,
     filteredMovies: [] as Movie[],
     moviesCount: 0,
     categories: [] as Array<string>,
@@ -23,6 +27,35 @@ export const useMovieStore = defineStore({
     },
     isReadonly(): boolean {
       return !this.editMode;
+    },
+    emptyMovie(): Movie {
+      return {
+        title: "",
+        description: "",
+        rating: 0,
+        is_favorite: false,
+        type: "" as MovieType,
+        status: "" as MovieStatus,
+        episode: 0,
+        total_episodes: 0,
+        image: {
+          background: "",
+          poster: "",
+        },
+        categories: [] as Array<string>,
+      } as Movie;
+    },
+    filtered(): Array<Movie> {
+      let filtered: Movie[] = this.movies;
+      if (this.type !== "all") {
+        filtered = filtered.filter((movie: Movie) => movie.type === this.type);
+      }
+      if (this.status !== "all") {
+        filtered = filtered.filter(
+          (movie: Movie) => movie.status === this.status
+        );
+      }
+      return filtered;
     },
   },
   actions: {
@@ -37,9 +70,14 @@ export const useMovieStore = defineStore({
         Object.assign(this, clone(data));
       });
     },
-    addMovie(movie: Movie): void {
-      this.movies.push(movie);
-      MovieAPI.createMovie(movie);
+    async addMovie(movie: Movie): Promise<void> {
+      const options = {
+        allowEmptyArrays: true,
+      };
+      let form = serialize(movie, options);
+      await MovieAPI.createMovie(form).then((data) => {
+        this.movies.push(data);
+      });
       this.moviesCount = this.getMoviesCount;
     },
     async updateMovie(movie: Movie, slug: string): Promise<void> {
@@ -47,51 +85,30 @@ export const useMovieStore = defineStore({
         movie,
         this.readonlyMovie
       );
-      // let form = toFormData(data);
       const options = {
         allowEmptyArrays: true,
       };
       let form = serialize(data, options);
-      for (let i of form.values()) {
-        console.log(i);
-      }
-      // if (data.categories.length === 0) {
-      //   console.log(data.categories.length, "length");
-      // }
       form.append("_method", "PUT");
       await MovieAPI.updateMovie(slug, form).then((data) => {
         console.log(data);
         this.movie = cloneDeep(data);
       });
     },
-    // removeMovie(movie: Movie): void {
-    //   if (movie.id !== undefined) {
-    //     this.movies = this.movies.filter((mv) => mv.id !== movie.id);
-    //     MovieAPI.deleteMovie(movie.id);
-    //     this.moviesCount = this.getMoviesCount;
-    //   }
-    // },
+    removeMovie(movie: Movie): void {
+      if (movie.id !== undefined) {
+        this.movies = this.movies.filter(
+          (mv) => mv.id !== movie.id && mv.slug === movie.slug
+        );
+        MovieAPI.deleteMovie(movie.slug);
+        this.moviesCount = this.getMoviesCount;
+      }
+    },
     async getMovieBySlug(slug: string): Promise<void> {
       await MovieAPI.getBySlug(slug).then((data) => {
         this.movie = cloneDeep(data);
         this.readonlyMovie = cloneDeep(data);
       });
-    },
-    getFiltered(type: string, status: string) {
-      this.filteredMovies = this.movies;
-      if (type === "all" && status !== "all") {
-        this.filteredMovies = this.filteredMovies.filter(
-          (movie: Movie) => movie.status === status
-        );
-      } else if (status === "all" && type !== "all") {
-        this.filteredMovies = this.filteredMovies.filter(
-          (movie: Movie) => movie.type === type
-        );
-      } else if (status !== "all" && type !== "all") {
-        this.filteredMovies = this.filteredMovies.filter(
-          (movie: Movie) => movie.status === status && movie.type === type
-        );
-      }
     },
   },
 });
