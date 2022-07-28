@@ -11,20 +11,47 @@ import MovieTags from "@/components/movie/MovieTags.vue";
 import MovieSelect from "@/components/movie/MovieSelect.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import FileInput from "@/components/FileInput.vue";
+import defaultbg from "@/assets/def-bg.jpg";
 import { storeToRefs } from "pinia";
 import { useMovieStore } from "@/stores/index";
 import type { Movie } from "@/models/Movie";
+import { computed } from "vue";
+import router from "@/router";
 
 const props = defineProps<{
-  slug: string;
+  slug?: string;
 }>();
-const { updateMovie } = useMovieStore();
+const { addMovie, updateMovie, removeMovie } = useMovieStore();
 const { movie, isReadonly, editMode } = storeToRefs(useMovieStore());
 
 function saveChanges(movie: Movie) {
-  updateMovie(movie, props.slug);
+  if (props.slug) {
+    updateMovie(movie, props.slug);
+  } else {
+    addMovie(movie);
+    router.push("/");
+  }
   editMode.value = false;
 }
+
+function deleteMovie(movie: Movie) {
+  if (props.slug) {
+    removeMovie(movie);
+  }
+  router.push("/");
+
+  editMode.value = false;
+}
+
+const btnTitle = computed<string>(() => {
+  return props.slug ? "Save changes" : "Save";
+});
+
+const background = computed<string>(() => {
+  return movie.value.image.background === ""
+    ? `url(${defaultbg})`
+    : `url(${movie.value.image.background})`;
+});
 </script>
 <template>
   <div class="text-sm sm:text-lg p-5">
@@ -32,7 +59,7 @@ function saveChanges(movie: Movie) {
       <!-- background image -->
       <div
         class="absolute w-full h-full rounded-xl -z-[200] opacity-20 backdrop"
-        :style="{ 'background-image': `url(${movie.image.background})` }"
+        :style="{ 'background-image': background }"
       ></div>
       <!-- background image -->
       <div
@@ -127,12 +154,20 @@ function saveChanges(movie: Movie) {
             v-if="!isReadonly"
             class="col-span-12 justify-self-center sm:col-start-11 sm:col-end-13 sm:place-self-end"
           >
-            <BaseButton
-              class="bg-dark p-3 rounded-xl duration-300 drop-shadow-sm hover:drop-shadow-xl text-ellipsis"
-              @click.prevent="saveChanges(movie)"
-            >
-              Save changes
-            </BaseButton>
+            <div class="flex flex-col gap-5">
+              <BaseButton
+                class="bg-dark p-3 rounded-xl duration-300 drop-shadow-sm hover:drop-shadow-xl text-ellipsis"
+                @click.prevent="deleteMovie(movie)"
+              >
+                Delete Movie
+              </BaseButton>
+              <BaseButton
+                class="bg-dark p-3 rounded-xl duration-300 drop-shadow-sm hover:drop-shadow-xl text-ellipsis"
+                @click.prevent="saveChanges(movie)"
+              >
+                {{ btnTitle }}
+              </BaseButton>
+            </div>
           </div>
         </Transition>
       </div>
