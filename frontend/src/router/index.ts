@@ -30,6 +30,19 @@ const router = createRouter({
       },
     },
     {
+      path: "/create",
+      name: "create",
+      component: MovieView,
+      props: false,
+      beforeEnter: (to, from) => {
+        const { movie, editMode } = storeToRefs(useMovieStore());
+        const { getCategories, emptyMovie } = useMovieStore();
+        movie.value = emptyMovie;
+        editMode.value = true;
+        getCategories();
+      },
+    },
+    {
       path: "/:pathMatch(.*)*",
       name: "404",
       component: PageNotFoundView,
@@ -37,13 +50,5 @@ const router = createRouter({
   ],
   sensitive: true,
 });
-
-// router.beforeEach((to, from) => {
-//   if (from.name !== undefined) {
-//     const { isLoading } = storeToRefs(useMovieStore());
-//     isLoading.value = true;
-//   }
-//   return true;
-// });
 
 export default router;
