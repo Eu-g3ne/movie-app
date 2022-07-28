@@ -3,7 +3,7 @@ import type MovieType from "@/models/Enums/MovieType";
 import type { Image } from "@/models/Image";
 
 interface Movie {
-  readonly id: number;
+  readonly id?: number;
   slug: string;
   title: string;
   description: string;
