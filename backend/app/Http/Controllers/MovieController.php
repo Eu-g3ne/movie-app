@@ -64,6 +64,7 @@ class MovieController extends Controller
       $this->movieService->storeImages($movie, $request);
 
       $this->movieService->syncCategories($movie, $request->validated()['categories'] ?? []);
+      cache()->forget('movies');
       return $this->movieResponse($movie);
     } catch (Throwable $e) {
       report($e);
@@ -100,9 +101,6 @@ class MovieController extends Controller
   {
     $movie->update($request->validated());
     $this->movieService->updateImages($movie, $request);
-    // dump($request->validated()['categories']);
-    // dump(isset($request->validated()['categories']));
-    // dd($request->validated()['categories'][0] === null);
     if (isset($request->validated()['categories'])) {
       $this->movieService->syncCategories($movie, $request->validated()['categories'][0] !== null ? $request->validated()['categories'] : []);
     }
@@ -119,8 +117,18 @@ class MovieController extends Controller
    */
   public function destroy(Movie $movie)
   {
-    //
-    $movie->delete();
+    try {
+      $slash = strripos($movie->image->poster, '/'); // REMOVE THIS IN PROD
+      $poster = $movie->image->poster; // REMOVE THIS IN PROD
+      if (mb_substr($poster, 0, $slash) !== 'images/img') { // REMOVE THIS IN PROD
+        Storage::delete([$movie->image->background, $movie->image->poster]);
+      }
+      $movie->delete();
+      cache()->forget('movies');
+    } catch (Throwable $e) {
+      report($e);
+      return response()->json(['message' => $e], 500);
+    }
   }
   public function movieResponse(Movie $movie)
   {
