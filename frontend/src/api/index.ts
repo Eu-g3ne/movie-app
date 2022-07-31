@@ -27,4 +27,7 @@ export const MovieAPI = {
     requests.post(`movies/${slug}`, movie),
   deleteMovie: (slug: string): Promise<void> =>
     requests.delete(`movies/${slug}`),
+  login: (user: { name: string; password: string }): Promise<void> =>
+    requests.post("login", user),
+  logout: (): Promise<void> => requests.post("logout", {}),
 };

@@ -20,6 +20,7 @@ export const useMovieStore = defineStore({
     categories: [] as Array<string>,
     editMode: true as boolean, // need false
     isLoading: false as boolean,
+    isAuthenticated: false,
   }),
   getters: {
     getMoviesCount(): number {
@@ -60,15 +61,25 @@ export const useMovieStore = defineStore({
   },
   actions: {
     async getAllMovies(): Promise<void> {
-      await MovieAPI.getMovies().then((data) => {
-        Object.assign(this, data);
-        this.filteredMovies = this.movies;
-      });
+      await MovieAPI.getMovies()
+        .then((data) => {
+          Object.assign(this, data);
+          this.filteredMovies = this.movies;
+          this.auth();
+        })
+        .catch((error) => {
+          this.unauth();
+        });
     },
     async getCategories(): Promise<void> {
-      await MovieAPI.getAllCategories().then((data) => {
-        Object.assign(this, clone(data));
-      });
+      await MovieAPI.getAllCategories()
+        .then((data) => {
+          Object.assign(this, clone(data));
+          this.auth();
+        })
+        .catch((error) => {
+          this.unauth();
+        });
     },
     async addMovie(movie: Movie): Promise<void> {
       const options = {
@@ -95,20 +106,31 @@ export const useMovieStore = defineStore({
         this.movie = cloneDeep(data);
       });
     },
-    removeMovie(movie: Movie): void {
+    async removeMovie(movie: Movie): Promise<void> {
       if (movie.id !== undefined) {
         this.movies = this.movies.filter(
           (mv) => mv.id !== movie.id && mv.slug === movie.slug
         );
-        MovieAPI.deleteMovie(movie.slug);
+        await MovieAPI.deleteMovie(movie.slug);
         this.moviesCount = this.getMoviesCount;
       }
     },
     async getMovieBySlug(slug: string): Promise<void> {
-      await MovieAPI.getBySlug(slug).then((data) => {
-        this.movie = cloneDeep(data);
-        this.readonlyMovie = cloneDeep(data);
-      });
+      await MovieAPI.getBySlug(slug)
+        .then((data) => {
+          this.movie = cloneDeep(data);
+          this.readonlyMovie = cloneDeep(data);
+          this.auth();
+        })
+        .catch((error) => {
+          this.unauth();
+        });
+    },
+    auth(): void {
+      this.isAuthenticated = true;
+    },
+    unauth(): void {
+      this.isAuthenticated = false;
     },
   },
 });

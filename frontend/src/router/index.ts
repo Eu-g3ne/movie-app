@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 const MainView = () => import("@/views/MainView.vue");
 const MovieView = () => import("@/views/MovieView.vue");
+const LoginView = () => import("@/views/LoginView.vue");
 const PageNotFoundView = () => import("@/views/PageNotFoundView.vue");
 
 const router = createRouter({
@@ -13,9 +14,9 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: MainView,
-      beforeEnter: (to, from) => {
+      beforeEnter: async (to, from) => {
         const { getAllMovies } = useMovieStore();
-        getAllMovies();
+        await getAllMovies();
       },
     },
     {
@@ -23,10 +24,10 @@ const router = createRouter({
       name: "movie",
       component: MovieView,
       props: true,
-      beforeEnter: (to, from) => {
+      beforeEnter: async (to, from) => {
         const { getMovieBySlug, getCategories } = useMovieStore();
-        getMovieBySlug(to.params.slug as string);
-        getCategories();
+        await getMovieBySlug(to.params.slug as string);
+        await getCategories();
       },
     },
     {
@@ -34,13 +35,19 @@ const router = createRouter({
       name: "create",
       component: MovieView,
       props: false,
-      beforeEnter: (to, from) => {
+      beforeEnter: async (to, from) => {
         const { movie, editMode } = storeToRefs(useMovieStore());
         const { getCategories, emptyMovie } = useMovieStore();
         movie.value = emptyMovie;
         editMode.value = true;
-        getCategories();
+        await getCategories();
       },
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: LoginView,
+      props: false,
     },
     {
       path: "/:pathMatch(.*)*",
@@ -49,6 +56,14 @@ const router = createRouter({
     },
   ],
   sensitive: true,
+});
+
+router.beforeResolve((to, from) => {
+  const { isAuthenticated } = storeToRefs(useMovieStore());
+
+  if (!(to.name === "login") && !isAuthenticated.value) {
+    return { name: "login" };
+  }
 });
 
 export default router;
