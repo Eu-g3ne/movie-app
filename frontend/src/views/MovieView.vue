@@ -28,8 +28,9 @@ function saveChanges(movie: Movie) {
   if (props.slug) {
     updateMovie(movie, props.slug);
   } else {
-    addMovie(movie);
-    router.push("/");
+    addMovie(movie).then(() => {
+      router.push("/");
+    });
   }
   editMode.value = false;
 }
