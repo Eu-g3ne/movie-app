@@ -29,7 +29,6 @@ class MovieController extends Controller
     $this->movie = $movie;
     $this->movieService = $movieService;
   }
-
   public function index()
   {
     try {
