@@ -18,7 +18,7 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  (e: "update:value", value: string | number): void;
+  (e: "update:value", value: number): void;
 }>();
 
 function updateValue(e: WheelEvent): void {
@@ -42,7 +42,7 @@ const val = computed({
   get() {
     return props.value;
   },
-  set(val) {
+  set(val: number) {
     emit("update:value", val);
   },
 });

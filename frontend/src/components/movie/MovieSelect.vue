@@ -18,7 +18,7 @@ const val = computed({
   get() {
     return props.value;
   },
-  set(val) {
+  set(val: string) {
     emit("update:value", val);
   },
 });

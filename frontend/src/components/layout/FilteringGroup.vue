@@ -27,12 +27,12 @@ watch([type, status], ([newType, newStatus], [prevType, prevStatus]) => {
       <ButtonGroup
         :column="'Type'"
         :names="getNames(Object.values(MovieType))"
-        @click="type = $event.target.value"
+        @click="type = ($event.target as HTMLButtonElement).value"
       />
       <ButtonGroup
         :column="'Status'"
         :names="getNames(Object.values(MovieStatus))"
-        @click="status = $event.target.value"
+        @click="status = ($event.target as HTMLButtonElement).value"
       />
     </div>
   </CollapseMenu>
