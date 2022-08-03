@@ -21,13 +21,13 @@ Route::controller(AuthController::class)->group(function () {
   Route::post('/register', 'register');
   Route::post('/login', 'login');
 });
-// Route::middleware('auth:sanctum')->group(function () {
-Route::post('/logout', [AuthController::class, 'logout']);
+Route::middleware('auth:sanctum')->group(function () {
+  Route::post('/logout', [AuthController::class, 'logout']);
 
-Route::apiResource('movies', MovieController::class);
+  Route::apiResource('movies', MovieController::class);
 
-Route::prefix('categories')->controller(CategoryController::class)->group(function () {
-  Route::get('/', 'index');
-  Route::delete('{category}', 'destroy');
+  Route::prefix('categories')->controller(CategoryController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::delete('{category}', 'destroy');
+  });
 });
-// });

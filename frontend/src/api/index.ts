@@ -1,9 +1,10 @@
-import axios, { type AxiosRequestConfig, type AxiosResponse } from "axios";
+import axios, { type AxiosResponse } from "axios";
 import type { Movie, Movies } from "@/models/Movie";
 
 const instance = axios.create({
   baseURL: "http://localhost:3000/api",
   headers: {
+    accept: "application/json",
     "content-type": "multipart/form-data",
   },
 });
@@ -17,6 +18,11 @@ const requests = {
   delete: (url: string) => instance.delete(url).then(responseBody),
 };
 
+instance.interceptors.request.use((config) => {
+  config.headers!.Authorization = `Bearer ${localStorage.getItem("apiToken")}`;
+  return config;
+});
+
 export const MovieAPI = {
   getMovies: (): Promise<Movies> => requests.get("movies"),
   getAllCategories: (): Promise<Array<string>> => requests.get("categories"),
@@ -27,7 +33,9 @@ export const MovieAPI = {
     requests.post(`movies/${slug}`, movie),
   deleteMovie: (slug: string): Promise<void> =>
     requests.delete(`movies/${slug}`),
-  login: (user: { name: string; password: string }): Promise<void> =>
-    requests.post("login", user),
+  login: (user: {
+    name: string;
+    password: string;
+  }): Promise<{ token: string }> => requests.post("login", user),
   logout: (): Promise<void> => requests.post("logout", {}),
 };

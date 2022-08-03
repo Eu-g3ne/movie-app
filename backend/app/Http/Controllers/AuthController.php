@@ -6,6 +6,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -29,20 +30,21 @@ class AuthController extends Controller
   {
     try {
       if (auth()->check()) {
-        return response()->json(['message' => 'Already authenticated'], 403);
+        throw ValidationException::withMessages([
+          'message' => ['Already authenticated'],
+        ]);
       }
       $credentials = $request->validated();
-      if (auth()->attempt($credentials, true)) {
+      if (auth()->attempt($credentials)) {
         $user = $request->user();
         $token = $user->createToken('api')->plainTextToken;
-        // $request->session()->regenerate();
         return response()->json([
-          'message' => 'Authenticated whasap'
+          'token' => $token
         ]);
       }
       return response()->json([
         'message' => 'Unauthenticated'
-      ]);
+      ], 403);
       return response()->json();
     } catch (Throwable $e) {
       report($e);
@@ -52,11 +54,10 @@ class AuthController extends Controller
 
   public function logout(Request $request)
   {
-    // auth()->user()->tokens()->delete(); // not a error, just stupid intelephense
-    auth()->guard('web')->logout();
-    $request->session()->invalidate();
-
-    $request->session()->regenerateToken();
+    auth()->user()->tokens()->delete(); // not a error, just stupid intelephense
+    // auth()->guard('web')->logout();
+    // $request->session()->invalidate();
+    // $request->session()->regenerateToken();
     return response()->json([
       'message' => 'Logged out'
     ], 200);

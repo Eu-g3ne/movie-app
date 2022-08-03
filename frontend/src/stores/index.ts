@@ -65,20 +65,21 @@ export const useMovieStore = defineStore({
         .then((data) => {
           Object.assign(this, data);
           this.filteredMovies = this.movies;
-          this.auth();
+          this.isAuthenticated = true;
         })
         .catch((error) => {
-          this.unauth();
+          this.isAuthenticated = false;
+          console.log(error);
         });
     },
     async getCategories(): Promise<void> {
       await MovieAPI.getAllCategories()
         .then((data) => {
           Object.assign(this, clone(data));
-          this.auth();
+          this.isAuthenticated = true;
         })
         .catch((error) => {
-          this.unauth();
+          this.isAuthenticated = false;
         });
     },
     async addMovie(movie: Movie): Promise<void> {
@@ -102,7 +103,6 @@ export const useMovieStore = defineStore({
       let form = serialize(data, options);
       form.append("_method", "PUT");
       await MovieAPI.updateMovie(slug, form).then((data) => {
-        console.log(data);
         this.movie = cloneDeep(data);
       });
     },
@@ -120,17 +120,11 @@ export const useMovieStore = defineStore({
         .then((data) => {
           this.movie = cloneDeep(data);
           this.readonlyMovie = cloneDeep(data);
-          this.auth();
+          this.isAuthenticated = true;
         })
         .catch((error) => {
-          this.unauth();
+          this.isAuthenticated = false;
         });
-    },
-    auth(): void {
-      this.isAuthenticated = true;
-    },
-    unauth(): void {
-      this.isAuthenticated = false;
     },
   },
 });

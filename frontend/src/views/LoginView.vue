@@ -16,7 +16,8 @@ const user: User = reactive({ name: "", password: "" });
 
 async function login() {
   await MovieAPI.login(user)
-    .then(() => {
+    .then((data) => {
+      localStorage.setItem("apiToken", data.token);
       router.push("/");
     })
     .catch((error) => {

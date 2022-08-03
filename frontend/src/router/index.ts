@@ -26,8 +26,7 @@ const router = createRouter({
       props: true,
       beforeEnter: async (to, from) => {
         const { getMovieBySlug, getCategories } = useMovieStore();
-        await getMovieBySlug(to.params.slug as string);
-        await getCategories();
+        Promise.all([getMovieBySlug(to.params.slug as string), getCategories]);
       },
     },
     {

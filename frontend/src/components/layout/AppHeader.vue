@@ -11,7 +11,9 @@ import router from "@/router";
 useScrollEffect();
 
 function logout() {
-  MovieAPI.logout();
+  MovieAPI.logout().then(() => {
+    localStorage.removeItem("apiToken");
+  });
   router.push("/login");
 }
 </script>
