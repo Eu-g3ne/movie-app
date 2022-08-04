@@ -2,7 +2,7 @@ import axios, { type AxiosResponse } from "axios";
 import type { Movie, Movies } from "@/models/Movie";
 
 const instance = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: "https://api-eug3ne-movie-app.herokuapp.com",
   headers: {
     accept: "application/json",
     "content-type": "multipart/form-data",
