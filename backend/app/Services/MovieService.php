@@ -59,10 +59,12 @@ class MovieService
     $this->imagesInit($movie, $request);
     $movie->image()->create(['poster' => '', 'background' => '']);
     if ($request->hasFile('image.background')) {
-      $movie->image->background = $this->background->storePubliclyAs('images', 'background-' . $this->filename . '.' . $this->background->extension());
+      // $movie->image->background = $this->background->storePubliclyAs('images', 'background-' . $this->filename . '.' . $this->background->extension());
+      $movie->image->background = $this->background->store('images', 's3');
     }
     if ($request->hasFile('image.poster')) {
-      $movie->image->poster = $this->poster->storePubliclyAs('images', 'poster-' . $this->filename . '.' . $this->poster->extension());
+      // $movie->image->poster = $this->poster->storePubliclyAs('images', 'poster-' . $this->filename . '.' . $this->poster->extension());
+      $movie->image->poster = $this->poster->store('images', 's3');
     }
     $movie->image->save();
   }
