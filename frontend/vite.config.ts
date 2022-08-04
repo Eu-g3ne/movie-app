@@ -14,14 +14,10 @@ export default defineConfig({
   server: {
     proxy: {
       "^/api/": {
-        target: "http://localhost:8000",
+        // target: "http://localhost:8000",
+        target: "https://api-eug3ne-movie-app.herokuapp.com",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
-      },
-      "^/images/": {
-        target: "http://localhost:8000/",
-        changeOrigin: true,
-        // rewrite: (path) => path.replace(/^\/images/, ""),
       },
     },
   },
