@@ -33,7 +33,7 @@ class MovieController extends Controller
   {
     try {
       $movies = cache()->remember('movies', now()->addMinutes(30), function () {
-        return $this->movie->with(['categories', 'image'])->get();
+        return auth()->user()->movies;
       });
       return new MovieCollection($movies);
     } catch (Throwable $e) {
@@ -58,13 +58,13 @@ class MovieController extends Controller
   {
     try {
 
-      $movie = Movie::create($request->validated());
+      $this->movie = Movie::create($request->validated());
 
-      $this->movieService->storeImages($movie, $request);
+      $this->movieService->storeImages($this->movie, $request);
 
-      $this->movieService->syncCategories($movie, $request->validated()['categories'] ?? []);
+      $this->movieService->syncCategories($this->movie, $request->validated()['categories'] ?? []);
       cache()->forget('movies');
-      return $this->movieResponse($movie);
+      return $this->movieResponse($this->movie);
     } catch (Throwable $e) {
       report($e);
       return response()->json(['message' => $e], 500);
@@ -74,20 +74,14 @@ class MovieController extends Controller
   /**
    * Display the specified resource.
    *
-   * @param  int  $id
+   * @param  Movie  $movie
    * @return \Illuminate\Http\Response
    */
   public function show(Movie $movie)
   {
-    return new MovieResource($movie);
+    $this->movie = $this->movieService->findMovie($movie);
+    return new MovieResource($this->movie);
   }
-
-  /**
-   * Show the form for editing the specified resource.
-   *
-   * @param  int  $id
-   * @return \Illuminate\Http\Response
-   */
 
   /**
    * Update the specified resource in storage.
@@ -98,14 +92,14 @@ class MovieController extends Controller
    */
   public function update(UpdateRequest $request, Movie $movie)
   {
-    $movie->update($request->validated());
-    $this->movieService->updateImages($movie, $request);
+    $this->movie = $this->movieService->findMovie($movie);
+    $this->movie->update($request->validated());
+    $this->movieService->updateImages($this->movie, $request);
     if (isset($request->validated()['categories'])) {
-      $this->movieService->syncCategories($movie, $request->validated()['categories'][0] !== null ? $request->validated()['categories'] : []);
+      $this->movieService->syncCategories($this->movie, $request->validated()['categories'][0] !== null ? $request->validated()['categories'] : []);
     }
-
-
-    return new MovieResource($movie->load('categories', 'image'));
+    cache()->forget('movies');
+    return new MovieResource($this->movieResponse($this->movie));
   }
 
   /**
@@ -117,12 +111,13 @@ class MovieController extends Controller
   public function destroy(Movie $movie)
   {
     try {
-      $slash = strripos($movie->image->poster, '/'); // REMOVE THIS IN PROD
-      $poster = $movie->image->poster; // REMOVE THIS IN PROD
+      $this->movie = $this->movieService->findMovie($movie);
+      $slash = strripos($this->movie->image->poster, '/'); // REMOVE THIS IN PROD
+      $poster = $this->movie->image->poster; // REMOVE THIS IN PROD
       if (mb_substr($poster, 0, $slash) !== 'images/img') { // REMOVE THIS IN PROD
-        Storage::delete([$movie->image->background, $movie->image->poster]);
+        Storage::delete([$this->movie->image->background, $this->movie->image->poster]);
       }
-      $movie->delete();
+      $this->movie->delete();
       cache()->forget('movies');
     } catch (Throwable $e) {
       report($e);

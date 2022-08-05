@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Category;
 use App\Models\Image;
+use App\Models\User;
 
 return new class extends Migration
 {
@@ -28,6 +29,7 @@ return new class extends Migration
       $table->boolean('is_favorite')->default(false);
       $table->timestamp('created_at')->useCurrent();
       $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable();
+      $table->foreignIdFor(User::class)->constrained();
     });
   }
 

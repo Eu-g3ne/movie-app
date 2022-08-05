@@ -44,6 +44,11 @@ class Movie extends Model
     return $this->hasOne(Image::class);
   }
 
+  public function user()
+  {
+    return $this->belongsTo(User::class);
+  }
+
   public function title(): Attribute
   {
     return new Attribute(
