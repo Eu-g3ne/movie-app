@@ -68,4 +68,9 @@ class MovieService
     }
     $movie->image->save();
   }
+
+  public function findMovie(Movie $movie)
+  {
+    return Movie::where('user_id', auth()->user()->id)->findOrFail($movie->id);
+  }
 }
