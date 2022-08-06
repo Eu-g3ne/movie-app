@@ -41,15 +41,11 @@ class MovieService
   public function updateImages(Movie $movie, Request $request)
   {
     $this->imagesInit($movie, $request);
-    if ($request->hasFile('image.background')) {
-      if (Storage::delete($movie->image->background)) {
-        $movie->image->background = $this->background->storePubliclyAs('images', 'background-' . $this->filename . '.' . $this->background->extension());
-      }
+    if ($request->hasFile('image.background' && Storage::delete($movie->image->background))) {
+      $movie->image->background = $this->background->store('images');
     }
-    if ($request->hasFile('image.poster')) {
-      if (Storage::delete($movie->image->poster)) {
-        $movie->image->poster = $this->poster->storePubliclyAs('images', 'poster-' . $this->filename . '.' . $this->poster->extension());
-      }
+    if ($request->hasFile('image.poster') && Storage::delete($movie->image->poster)) {
+      $movie->image->poster = $this->poster->store('images');
     }
     $movie->image->save();
   }
@@ -59,12 +55,10 @@ class MovieService
     $this->imagesInit($movie, $request);
     $movie->image()->create(['poster' => '', 'background' => '']);
     if ($request->hasFile('image.background')) {
-      // $movie->image->background = $this->background->storePubliclyAs('images', 'background-' . $this->filename . '.' . $this->background->extension());
-      $movie->image->background = $this->background->store('images', 's3');
+      $movie->image->background = $this->background->store('images');
     }
     if ($request->hasFile('image.poster')) {
-      // $movie->image->poster = $this->poster->storePubliclyAs('images', 'poster-' . $this->filename . '.' . $this->poster->extension());
-      $movie->image->poster = $this->poster->store('images', 's3');
+      $movie->image->poster = $this->poster->store('images');
     }
     $movie->image->save();
   }

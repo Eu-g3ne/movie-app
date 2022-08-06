@@ -32,8 +32,8 @@ class MovieResource extends JsonResource
       'image' => [
         // 'poster' => $this->image->poster ?: null,
         // 'background' => $this->image->background ?: null,
-        'poster' => Storage::disk('s3')->temporaryUrl($this->image->poster, now()->addMinutes(10)),
-        'background' => Storage::disk('s3')->temporaryUrl($this->image->background, now()->addMinutes(10)),
+        'poster' => getenv('FILESYSTEM_DISK') === 's3' ? Storage::temporaryUrl($this->image->poster, now()->addMinutes(10)) : $this->image->poster,
+        'background' => getenv('FILESYSTEM_DISK') === 's3' ? Storage::temporaryUrl($this->image->background, now()->addMinutes(10)) : $this->image->background,
       ],
       'categories' => $this->categories->pluck('name'),
     ];
