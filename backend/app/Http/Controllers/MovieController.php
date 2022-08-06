@@ -58,7 +58,7 @@ class MovieController extends Controller
   {
     try {
 
-      $this->movie = Movie::create($request->validated());
+      $this->movie = auth()->user()->movies()->create($request->validated());
 
       $this->movieService->storeImages($this->movie, $request);
 
