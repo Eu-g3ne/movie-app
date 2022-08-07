@@ -32,8 +32,8 @@ class MovieResource extends JsonResource
       'image' => [
         // 'poster' => $this->image->poster ?: null,
         // 'background' => $this->image->background ?: null,
-        'poster' => getenv('FILESYSTEM_DISK') === 'local' ? $this->image->poster : Storage::temporaryUrl($this->image->poster, now()->addMinutes(10)),
-        'background' => getenv('FILESYSTEM_DISK') === 'local' ? $this->image->background : Storage::temporaryUrl($this->image->background, now()->addMinutes(10)),
+        'poster' => config('app.env') === 'local' ? $this->image->poster : Storage::temporaryUrl($this->image->poster, now()->addMinutes(10)),
+        'background' => config('app.env') === 'local' ? $this->image->background : Storage::temporaryUrl($this->image->background, now()->addMinutes(10)),
       ],
       'categories' => $this->categories->pluck('name'),
     ];
