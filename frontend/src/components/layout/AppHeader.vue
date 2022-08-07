@@ -1,18 +1,19 @@
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 import { useScrollEffect } from "@/composables/helpers";
 import SwitchButton from "@/components/base/SwitchButton.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import { MovieAPI } from "@/api/index";
 import router from "@/router";
+import { useMovieStore } from "@/stores";
+import { storeToRefs } from "pinia";
 
+const { isAuthenticated } = storeToRefs(useMovieStore());
 useScrollEffect();
 
 function logout() {
   MovieAPI.logout().then(() => {
     localStorage.removeItem("apiToken");
+    isAuthenticated.value = false;
   });
   router.push("/login");
 }
@@ -26,6 +27,7 @@ function logout() {
     <div class="h-full flex flex-row justify-center items-center mx-8">
       <div class="w-24 h-8 mr-auto">
         <BaseButton
+          v-if="isAuthenticated"
           class="h-full bg-light rounded-3xl"
           @click="logout"
           >Logout</BaseButton
